@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        def mvnHome = tool name: 'apache-maven-3.3.1', type: 'maven'
+        def mvnHome = tool name: 'maven3.6.0', type: 'maven'
         def mvnCmd = "${mvnHome}/bin/mvn"
     }
     stages 
@@ -17,14 +17,14 @@ pipeline {
 	    {
 		    steps 
 		    {
-	    	     bat label: 'Creating jar file', script: "${mvnCmd} clean package"
+	    	     sh label: 'Creating jar file', script: "${mvnCmd} clean package"
 	    	}     
 	    }		 
 		stage('Build docker image') 
 	    {
 		    steps 
 		    {
-	    	     bat label: 'Creating Journal Image', script: 'docker build -t navkkrnair/journal:1.0 .'
+	    	     sh label: 'Creating Journal Image', script: 'docker build -t navkkrnair/journal:1.0 .'
 	    	}     
 	    }
 	    stage('Push image to docker hub') 
@@ -33,9 +33,9 @@ pipeline {
 		    {
 	    	    withCredentials([string(credentialsId: 'dockersecret', variable: 'dockerhubsecret')]) 
 	    	    {
-    				bat label: 'Login in to Docker hub', script: "docker login -u navkkrnair -p ${dockerhubsecret}"
+    				sh label: 'Login in to Docker hub', script: "docker login -u navkkrnair -p ${dockerhubsecret}"
        			}
-       			bat label: 'Pushing Journal Image to hub', script: 'docker push navkkrnair/journal:1.0'
+       			sh label: 'Pushing Journal Image to hub', script: 'docker push navkkrnair/journal:1.0'
   	    	}     
 	    }
 	}
