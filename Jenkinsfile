@@ -10,7 +10,7 @@ pipeline {
 	    {
 		    steps 
 		    {
-	    	     git credentialsId: 'github-credentials', url: 'https://github.com/navkkrnair/journal.git'
+	    	     git credentialsId: 'githubcredentials', url: 'https://github.com/navkkrnair/journal.git'
 	    	}     
 	    }
 	    stage('Mvn package') 
@@ -31,9 +31,9 @@ pipeline {
 	    {
 		    steps 
 		    {
-	    	    withCredentials([string(credentialsId: 'dockersecret', variable: 'dockerhubsecret')]) 
+	    	    withCredentials([string(credentialsId: 'dockersecret', variable: 'dockersecret')]) 
 	    	    {
-    				sh label: 'Login in to Docker hub', script: "docker login -u navkkrnair -p ${dockerhubsecret}"
+    				sh label: 'Login in to Docker hub', script: "docker login -u navkkrnair -p ${dockersecret}"
        			}
        			sh label: 'Pushing Journal Image to hub', script: 'docker push navkkrnair/journal:1.0'
   	    	}     
