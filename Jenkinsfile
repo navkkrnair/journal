@@ -17,7 +17,7 @@ pipeline {
 	    {
 		    steps 
 		    {
-	    	     sh label: 'Creating jar file', script: "${mvnCmd} clean package"
+	    	     sh label: 'Creating jar file', script: "${mvnCmd} -DskipTests -Dmaven.test.failure.ignore clean package"
 	    	}     
 	    }		 
 		stage('Build docker image') 
